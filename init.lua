@@ -412,11 +412,15 @@ require("lazy").setup({
 				-- You can put your default mappings / updates / etc. in here
 				--  All the info you're looking for is in `:help telescope.setup()`
 				--
-				-- defaults = {
-				--   mappings = {
-				--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-				--   },
-				-- },
+				defaults = {
+				   mappings = {
+				     --i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+            i = {
+                ["<C-j>"] = require('telescope.actions').move_selection_next,
+                ["<C-k>"] =require('telescope.actions').move_selection_previous
+            }
+				   },
+				 },
 				-- pickers = {}
 				layout_strategy = "bottom_pane",
 				extensions = {
@@ -432,16 +436,25 @@ require("lazy").setup({
 
 			-- See `:help telescope.builtin`
 			local builtin = require("telescope.builtin")
-			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
-			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
+			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[s]earch [h]elp" })
+			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[s]earch [k]eymaps" })
 			--vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
+			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[s]earch [s]elect Telescope" })
 			vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "[f]find [w]ord" })
-			vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "[f]ind by [G]rep" })
-			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[s]earch [D]iagnostics" })
-			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
+			--vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "[f]ind by [g]rep" })
+			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[s]earch [d]iagnostics" })
+			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[s]earch [r]esume" })
 			vim.keymap.set("n", "<leader>f.", builtin.oldfiles, { desc = '[f]ind Recent Files ("." for repeat)' })
 			--vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+
+			vim.keymap.set("n", "<leader>fg", function()
+				-- You can pass additional configuration to Telescope to change the theme, layout, etc.
+				builtin.live_grep(require("telescope.themes").get_ivy({
+					search_dirs = { "~/_dev", ".","~/Dropbox/kpkz_tools/Scripts3/"},
+          winblend = 10,
+					--previewer = false,
+				}))
+			end, { desc = "[f]ind by [g]rep" })
 
 			vim.keymap.set("n", "<leader><leader>", function()
 				-- You can pass additional configuration to Telescope to change the theme, layout, etc.
@@ -454,7 +467,7 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>ff", function()
 				-- You can pass additional configuration to Telescope to change the theme, layout, etc.
 				builtin.find_files(require("telescope.themes").get_ivy({
-					search_dirs = { "c:/Users/James/_dev", "." },
+					search_dirs = { "~/_dev", ".","~/Dropbox"},
 					winblend = 10,
 					previewer = false,
 				}))
@@ -851,8 +864,8 @@ require("lazy").setup({
 				--   <c-y> to accept ([y]es) the completion.
 				--    This will auto-import if your LSP supports it.
 				--    This will expand snippets if the LSP sent a snippet.
-				-- 'super-tab' for tab to accept
-				-- 'enter' for enter to accept
+				-- 'super-tab', -- for tab to accept
+				-- 'enter', -- for enter to accept
 				-- 'none' for no mappings
 				--
 				-- For an understanding of why the 'default' preset is recommended,
@@ -868,8 +881,8 @@ require("lazy").setup({
 				-- <c-k>: Toggle signature help
 				--
 				-- See :h blink-cmp-config-keymap for defining your own keymap
-				preset = "default",
-
+				--preset = "default",
+        preset = "super-tab",
 				-- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
 				--    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
 			},
