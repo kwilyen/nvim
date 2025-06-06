@@ -219,6 +219,12 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+  --vim.keymap.set("n","<leader>t",function ()
+  --  vim.cmd.vnew()
+  --  vim.cmd.term()
+  --  vim.cmd.wincmd("J")
+  --  vim.api.nvim_win_set_height(0,15)
+  --end)
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -296,6 +302,20 @@ require("lazy").setup({
 	--
 	-- Then, because we use the `opts` key (recommended), the configuration runs
 	-- after the plugin has been loaded as `require(MODULE).setup(opts)`.
+
+
+{
+  -- amongst your other plugins
+  {'akinsho/toggleterm.nvim', version = "*", config = function ()
+    require("toggleterm").setup{
+      insert_mappings = true, -- whether or not the open mapping applies in insert mode
+      terminal_mappings = true,
+      vim.keymap.set("n", "<C-_>", "<cmd>ToggleTerm<CR>", { desc = "Toggle Terminal" })
+      }
+  end,}   -- or
+  --{'akinsho/toggleterm.nvim', version = "*", opts = {--[[ things you want to change go here]]}}
+},
+
 
 {'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
@@ -940,7 +960,7 @@ require("lazy").setup({
 			-- Load the colorscheme here.
 			-- Like many other themes, this one has different styles, and you could load
 			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			--vim.cmd.colorscheme("tokyonight-night")
+			vim.cmd.colorscheme("habamax")
 		end,
 	},
 
