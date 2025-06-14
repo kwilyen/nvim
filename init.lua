@@ -83,12 +83,30 @@ I hope you enjoy your Neovim journey,
 
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
+-- Enter to accept suggestions'
+vim.keymap.set("c", "<cr>", function()
+  if vim.fn.pumvisible() == 1 then return '<c-y>' end
+  return '<cr>'
+  end, { expr = true })
 
+-- Spaces and Tabs
+vim.o.tabstop = 4 -- A TAB character looks like 4 spaces
+vim.o.expandtab = true -- Pressing the TAB key will insert spaces instead of a TAB character
+vim.o.softtabstop = 4 -- Number of spaces inserted instead of a TAB character
+vim.o.shiftwidth = 4 -- Number of spaces inserted when indenting
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+
+--enable powershell7
+if vim.fn.has("win32") then
+    vim.o.shell = "pwsh.exe"
+    vim.o.shellcmdflag = '-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues[\'Out-File:Encoding\']=\'utf8\';'
+    vim.o.shellredir = '2>&1 | %{ "$_" } | Out-File %s; exit $LastExitCode'
+    vim.o.shellpipe = '| %{ "$_" }'
+end
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -306,16 +324,23 @@ require("lazy").setup({
 
 {
   -- amongst your other plugins
-  {'akinsho/toggleterm.nvim', version = "*", config = function ()
-    require("toggleterm").setup{
-      insert_mappings = true, -- whether or not the open mapping applies in insert mode
-      terminal_mappings = true,
-      vim.keymap.set("n", "<C-_>", "<cmd>ToggleTerm<CR>", { desc = "Toggle Terminal" })
-      }
-  end,}   -- or
+  --{'akinsho/toggleterm.nvim', version = "*", config = function ()
+  --  require("toggleterm").setup{
+  --    insert_mappings = true, -- whether or not the open mapping applies in insert mode
+  --    terminal_mappings = true,
+  --    vim.keymap.set("n", "<C-_>", "<cmd>ToggleTerm<CR>", { desc = "Toggle Terminal" })
+  --    }
+  --end,}   -- or
   --{'akinsho/toggleterm.nvim', version = "*", opts = {--[[ things you want to change go here]]}}
 },
-
+{
+  "jiaoshijie/undotree",
+  dependencies = "nvim-lua/plenary.nvim",
+  config = true,
+  keys = { -- load the plugin only when using it's keybinding:
+    { "<leader>u", "<cmd>lua require('undotree').toggle()<cr>" },
+  },
+},
 
 {'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
@@ -516,7 +541,11 @@ require("lazy").setup({
 			end, { desc = "[S]earch [N]eovim files" })
 		end,
 	},
-
+{
+  'mrcjkb/haskell-tools.nvim',
+  version = '^5', -- Recommended
+  lazy = false, -- This plugin is already lazy
+},
 	-- LSP Plugins
 	{
 		-- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -885,7 +914,7 @@ require("lazy").setup({
 				--    This will auto-import if your LSP supports it.
 				--    This will expand snippets if the LSP sent a snippet.
 				-- 'super-tab', -- for tab to accept
-				-- 'enter', -- for enter to accept
+				--'enter', -- for enter to accept
 				-- 'none' for no mappings
 				--
 				-- For an understanding of why the 'default' preset is recommended,
