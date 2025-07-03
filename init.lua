@@ -88,7 +88,8 @@ vim.keymap.set("c", "<cr>", function()
   if vim.fn.pumvisible() == 1 then return '<c-y>' end
   return '<cr>'
   end, { expr = true })
-
+vim.keymap.set("v", "J", ":move '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":move '<-2<CR>gv=gv")
 -- Spaces and Tabs
 vim.o.tabstop = 4 -- A TAB character looks like 4 spaces
 vim.o.expandtab = true -- Pressing the TAB key will insert spaces instead of a TAB character
@@ -779,7 +780,7 @@ require("lazy").setup({
 				-- But for many setups, the LSP (`ts_ls`) will work just fine
 				-- ts_ls = {},
 				--
-
+        
 				lua_ls = {
 					-- cmd = { ... },
 					-- filetypes = { ... },
@@ -795,7 +796,12 @@ require("lazy").setup({
 					},
 				},
 			}
-
+local lspconfig = require('lspconfig')
+lspconfig.sourcekit.setup {
+  cmd = { "sourcekit-lsp" }, -- Make sure it's in your PATH
+  filetypes = { "swift", "objective-c", "objective-cpp" },
+  root_dir = require('lspconfig.util').root_pattern("Package.swift", ".git"),
+}
 			-- Ensure the servers and tools above are installed
 			--
 			-- To check the current status of installed tools and/or manually install
