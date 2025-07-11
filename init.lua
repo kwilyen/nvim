@@ -999,7 +999,7 @@ lspconfig.sourcekit.setup {
 			vim.cmd.colorscheme("habamax")
 vim.o.termguicolors = true
 
-vim.api.nvim_set_hl(0, "Normal", { bg="#04110d" })
+vim.api.nvim_set_hl(0, "Normal", { bg="#02080a" })
 		end,
 	},
 
